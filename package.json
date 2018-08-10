@@ -1,0 +1,30 @@
+{
+  "name": "authentification-api",
+  "version": "1.0.0",
+  "description": "Presentation ```bash This repository was first created to implement an API for a NuxtJs project. It uses NodeJs, Express and MongoDB to create our RESTful-api.",
+  "main": "server/config/main.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "dev": "nodemon index.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Chahinaz/node-authentification-api.git"
+  },
+  "keywords": [
+    "express",
+    "nodejs",
+    "mongodb"
+  ],
+  "author": "Chahinaz",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Chahinaz/node-authentification-api/issues"
+  },
+  "homepage": "https://github.com/Chahinaz/node-authentification-api#readme",
+  "dependencies": {
+    "express": "^4.16.3",
+    "mongoose": "^5.2.7",
+    "morgan": "^1.9.0"
+  }
+}
