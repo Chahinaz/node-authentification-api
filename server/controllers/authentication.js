@@ -2,7 +2,7 @@
 const jwt = require('jsonwebtoken'),
     crypto = require('crypto-js'),
     User = require('../models/user'),
-    config = require('./main');
+    config = require('../config/main');
 
 function setUserInfo(request) {
     return {
@@ -82,4 +82,14 @@ exports.roleAuthorization = function(role) {
             return next('Unauthorized');
         });
     }
+};
+
+//Forgotten Password
+exports.forgotPassword = function (req, res, next) {
+
+};
+
+//Reset Password
+exports.verifyToken = function(req, res, next) {
+
 };

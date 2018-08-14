@@ -1,23 +1,24 @@
-const AuthenticationController = require('./controllers/authentication'),
-    express = require('express'),
-    passportService = require('./config/passport'),
-    passport = require('passport');
+const AuthenticationController = require('./controllers/authentication');
+const UserController = require('./controllers/user');
+const express = require('express');
+const passport = require('passport');
+const passportService = require('./config/passport');
+
+
 
 //Require Middleware to login/auth
-const requireAuth = passport.authenticate('jwt', {session: false});
-const requireLogin = passport.authenticate('local', {session: false});
-
-//Role type const
-const REQUIRE_ADMIN = "Admin",
-    REQUIRE_MEMBER = "Member";
+// const requireAuth = passport.authenticate('jwt', {session: false});
+// const requireLogin = passport.authenticate('local', {session: false});
 
 //Set up routes
 module.exports = function(app) {
-    const apiRoutes = express.Router(),
-        authRoutes = express.Router();
+    const apiRoutes = express.Router();
+    const authRoutes = express.Router();
 
-    //auth routes as subgroup/middleware to apiRoutes
-    apiRoutes.use('/auth', authRoutes);
+    // //auth routes as subgroup/middleware to apiRoutes
+    // apiRoutes.use('/auth', authRoutes);
+    // //url for API group
+    // app.use('/api', apiRoutes);
 
     // Registration route
     authRoutes.post('/register', AuthenticationController.register);
@@ -25,7 +26,9 @@ module.exports = function(app) {
     // Login route
     authRoutes.post('/login', requireLogin, AuthenticationController.login);
 
-    //url for API group
-    app.use('/api', apiRoutes);
+    //route for status(404)
+    app.use(function(req, res) {
+        res.status(404).send({url: req.originalUrl + ' not found.\n'})
+    });
 };
 

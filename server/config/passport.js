@@ -1,7 +1,6 @@
 //Implementing passport, strategies and config
+
 const passport = require('passport'),
-    jswt = require('jsonwebtoken'),
-    crypto = require('crypto-js'),
     User = require('../models/user'),
     config = require('./main'),
     JwtStrategy = require('passport-jwt').Strategy,

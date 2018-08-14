@@ -1,5 +1,5 @@
 module.exports = {
     'secret' : "ZbraCatsDogsHollaMommyNarwhalsAreCuteCtuluhhuhuhu",
-    'database' : "mongodb:://localhost:27017/authentication-api",
+    'database' : "mongodb:://localhost/test",
     'port': process.env.Port || 3333
 };
