@@ -1,7 +1,5 @@
 const mongoose = require('mongoose'),
     Schema = mongoose.Schema,
-    jswt = require('jsonwebtoken'),
-    crypto = require('crypto-js'),
     bcrypt = require('bcryptjs');
 
 const UserSchema = new Schema({
@@ -24,10 +22,6 @@ const UserSchema = new Schema({
         lastName: {
             type: String,
             required: true
-        },
-        status: {
-            type: String,
-            enum : ['Engineer', 'Student', 'Someone playing around']
         },
         image: String,
         bio: String
