@@ -7,13 +7,6 @@ const express = require('express'),
     config = require('./config/main.js'),
     router = require('./router');
 
-//Start server
-const server = app.listen(config.port);
-console.log('Your server is running on port: ' + config.port);
-
-//Database connection
-// mongoose.connect('mongodb://127.0.0.1:27017/test', { useNewUrlParser: true } );
-
 app.use(bodyParser.urlencoded({extended: false}));
 app.use(bodyParser.json());
 
@@ -29,6 +22,20 @@ app.use(function(req, res, next){
    next();
 });
 
+
+//========================================
+//                                      //
+//                 ROUTE                //
+//                                      //
+//========================================
+
+/**
+ * MONGOOSE *
+ //Database connection
+ mongoose.connect(config.database, { useNewUrlParser: true } );
+ */
+
+//Used function to look on dataBase
 const findDocuments = function(db, callback) {
     // Get the documents collection
     const collection = db.collection('cities');
@@ -39,38 +46,32 @@ const findDocuments = function(db, callback) {
         console.log(docs)
         callback(docs);
     });
-}
+};
 
+// Connection URL and Database
 const MongoClient = require('mongodb').MongoClient;
 const assert = require('assert');
 
-// Connection URL
-const url = 'mongodb://localhost:27017';
+const dbName = 'chahinaz';
 
-// Database Name
-const dbName = 'test';
-
-
-let cities = []
+var results = [];
 
 // Use connect method to connect to the server
-MongoClient.connect(url, function(err, client) {
+MongoClient.connect(config.database, { useNewUrlParser: true },  function(err, client) {
     assert.equal(null, err);
-    console.log("Connected successfully to server");
-
     const db = client.db(dbName);
+    console.log("Connected successfully to server, at port: " + config.port);
 
     findDocuments(db, function(docs){
-       cities = docs
+        results = docs
     });
-
 });
 
 app.get('/', function(req, res) {
-    res.send(cities);
+    res.send(results)
 });
 
-
-
+var server = app.listen(config.port)
+console.log('Your server is running on port: ' + config.port);
 
 router(app);
