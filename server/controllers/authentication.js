@@ -31,19 +31,22 @@ exports.login = function(req, res, next) {
 };
 
 //Registration Route
-exports.register = function(req,res, next) {
+exports.register = function(req, res, next) {
     const firstName = req.body.firstName;
     const lastName = req.body.lastName;
     const email = req.body.email;
     const password = req.body.password;
 
+
     if(!email) return res.status(422).send({ error: 'You must enter an email address.'});
     if(!firstName || !lastName) return res.status(422).send({ error: 'You must enter your full name.'});
     if(!password) return res.status(422).send({ error: 'You must enter a password.'});
 
-    User.findOne({email}, function(err, existingUser) {
-        if(err) return next(err);
+    User.findOne({email: email}).exec(function(err, existingUser) {
+        if(err) return (err);
+
         if(existingUser) return res.status(422).send({ error: 'That email address is already in use.'});
+
 
         var user = new User ({
             email: email,
@@ -58,7 +61,7 @@ exports.register = function(req,res, next) {
             res.status(201).json({
                 token: 'JWT '+ generateToken(userInfo),
                 user: userInfo
-            })
+            });
         })
     })
 };
@@ -90,4 +93,11 @@ exports.forgotPassword = function (req, res, next) {
 //Reset Password
 exports.resetPassword = function(req, res, next) {
 
+};
+
+exports.allUsers = function(req, res) {
+    User.find({}, function(err, users){
+        if(err) return res.status(422).send({message: "An error occurred, please try again."});
+        res.send(users)
+    });
 };

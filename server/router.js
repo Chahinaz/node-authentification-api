@@ -2,8 +2,6 @@ const AuthenticationController = require('./controllers/authentication');
 const express = require('express');
 const passport = require('passport');
 
-
-
 //Require Middleware to login/auth
 const requireAuth = passport.authenticate('jwt', {session: false});
 const requireLogin = passport.authenticate('local', {session: false});
@@ -12,20 +10,26 @@ const requireLogin = passport.authenticate('local', {session: false});
 module.exports = function(app) {
     const apiRoutes = express.Router();
 
+    //Home route
+    app.get('/', function(req, res){
+        res.send("Welcome to Chahinaz' home ~ ")
+    });
+
     //url for API group
     app.use('/api', apiRoutes);
 
     // Registration route
-    apiRoutes.post('/register', AuthenticationController.register);
+    app.post('/register', function(req, res){
+        AuthenticationController.register(req, res)
+    });
 
     // Login route
-    apiRoutes.post('/login', requireLogin, AuthenticationController.login);
+    app.post('/login', function(req, res){
+        AuthenticationController.login(req, res)
+    });
 
-    //ForgottenPassword route
-    apiRoutes.use('/forgotpassword', AuthenticationController.forgotPassword);
-
-    //ResetPassword
-    apiRoutes.use('/resetpassword', AuthenticationController.resetPassword);
+    //All Users route
+    app.get('/users', AuthenticationController.allUsers);
 
     //route for status(404)
     app.use(function(req, res) {
