@@ -32,25 +32,23 @@ exports.login = function(req, res, next) {
 
 //Registration Route
 exports.register = function(req,res, next) {
-    const email = req.body.email;
     const firstName = req.body.firstName;
     const lastName = req.body.lastName;
+    const email = req.body.email;
     const password = req.body.password;
-    const image = req.body.image;
-    const bio = req.body.bio;
 
     if(!email) return res.status(422).send({ error: 'You must enter an email address.'});
     if(!firstName || !lastName) return res.status(422).send({ error: 'You must enter your full name.'});
     if(!password) return res.status(422).send({ error: 'You must enter a password.'});
 
-    User.findOne({email: email}, function(err, existingUser) {
+    User.findOne({email}, function(err, existingUser) {
         if(err) return next(err);
         if(existingUser) return res.status(422).send({ error: 'That email address is already in use.'});
 
         var user = new User ({
             email: email,
             password: password,
-            profile: { firstName: firstName, lastName: lastName, image: image, bio: bio}
+            profile: { firstName, lastName}
         });
 
         user.save(function(err, user) {
@@ -90,6 +88,6 @@ exports.forgotPassword = function (req, res, next) {
 };
 
 //Reset Password
-exports.verifyToken = function(req, res, next) {
+exports.resetPassword = function(req, res, next) {
 
 };

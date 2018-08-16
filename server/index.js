@@ -49,12 +49,11 @@ const findUsersDocuments = function(db, callback) {
     collection.find({}).toArray(function(err, docs) {
         assert.equal(err, null);
         console.log("Found the following records");
-        console.log(docs)
+        console.log(docs);
         callback(docs);
     });
 };
 
-//Use connect method to connect to the server
 app.get('/users', function(req, res) {
     MongoClient.connect(config.database, { useNewUrlParser: true }, function(err, client) {
         assert.equal(null, err);
@@ -69,7 +68,7 @@ app.get('/users', function(req, res) {
     res.send(results)
 });
 
-var server = app.listen(config.port)
+var server = app.listen(config.port);
 console.log('Your server is running on port: ' + config.port);
 
 router(app);

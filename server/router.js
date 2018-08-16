@@ -11,22 +11,25 @@ const requireLogin = passport.authenticate('local', {session: false});
 //Set up routes
 module.exports = function(app) {
     const apiRoutes = express.Router();
-    const authRoutes = express.Router();
 
-    //auth routes as subgroup/middleware to apiRoutes
-    apiRoutes.use('/auth', authRoutes);
     //url for API group
     app.use('/api', apiRoutes);
 
     // Registration route
-    authRoutes.post('/register', AuthenticationController.register);
+    apiRoutes.post('/register', AuthenticationController.register);
 
     // Login route
-    authRoutes.post('/login', requireLogin, AuthenticationController.login);
+    apiRoutes.post('/login', requireLogin, AuthenticationController.login);
+
+    //ForgottenPassword route
+    apiRoutes.use('/forgotpassword', AuthenticationController.forgotPassword);
+
+    //ResetPassword
+    apiRoutes.use('/resetpassword', AuthenticationController.resetPassword);
 
     //route for status(404)
     app.use(function(req, res) {
-        res.status(404).send({url: req.originalUrl + ' not found.\n'})
+        res.status(404).send({error: 'URL not found.\n'})
     });
 };
 
