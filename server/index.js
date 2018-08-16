@@ -31,14 +31,20 @@ app.use(function(req, res, next){
 
 /**
  * MONGOOSE *
- //Database connection
- mongoose.connect(config.database, { useNewUrlParser: true } );
- */
+ Database connection:
+    mongoose.connect(config.database, { useNewUrlParser: true } );
+*/
+
+// Connection URL and Database
+const MongoClient = require('mongodb').MongoClient;
+const assert = require('assert');
+const dbName = 'chahinaz';
+var results = [];
 
 //Used function to look on dataBase
-const findDocuments = function(db, callback) {
+const findUsersDocuments = function(db, callback) {
     // Get the documents collection
-    const collection = db.collection('cities');
+    const collection = db.collection('users');
     // Find some documents
     collection.find({}).toArray(function(err, docs) {
         assert.equal(err, null);
@@ -48,26 +54,18 @@ const findDocuments = function(db, callback) {
     });
 };
 
-// Connection URL and Database
-const MongoClient = require('mongodb').MongoClient;
-const assert = require('assert');
+//Use connect method to connect to the server
+app.get('/users', function(req, res) {
+    MongoClient.connect(config.database, { useNewUrlParser: true }, function(err, client) {
+        assert.equal(null, err);
+        const db = client.db(dbName);
+        console.log("Connected successfully to server, at port: " + config.port);
 
-const dbName = 'chahinaz';
-
-var results = [];
-
-// Use connect method to connect to the server
-MongoClient.connect(config.database, { useNewUrlParser: true },  function(err, client) {
-    assert.equal(null, err);
-    const db = client.db(dbName);
-    console.log("Connected successfully to server, at port: " + config.port);
-
-    findDocuments(db, function(docs){
-        results = docs
+        findUsersDocuments(db, function(docs){
+            results = docs
+            // db.close;
+        });
     });
-});
-
-app.get('/', function(req, res) {
     res.send(results)
 });
 

@@ -1,8 +1,6 @@
 const AuthenticationController = require('./controllers/authentication');
-const UserController = require('./controllers/user');
 const express = require('express');
 const passport = require('passport');
-const passportService = require('./config/passport');
 
 
 

@@ -47,7 +47,7 @@ exports.register = function(req,res, next) {
         if(err) return next(err);
         if(existingUser) return res.status(422).send({ error: 'That email address is already in use.'});
 
-        let user = new User ({
+        var user = new User ({
             email: email,
             password: password,
             profile: { firstName: firstName, lastName: lastName, image: image, bio: bio}
@@ -56,7 +56,7 @@ exports.register = function(req,res, next) {
         user.save(function(err, user) {
             if(err) return next(err);
 
-            let userInfo = setUserInfo(user);
+            var userInfo = setUserInfo(user);
             res.status(201).json({
                 token: 'JWT '+ generateToken(userInfo),
                 user: userInfo
