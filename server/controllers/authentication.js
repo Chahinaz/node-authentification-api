@@ -1,6 +1,5 @@
 //Setup user information from request
 const jwt = require('jsonwebtoken'),
-    crypto = require('crypto-js'),
     User = require('../models/user'),
     config = require('../config/main');
     setUserInfo = require('../helper').setUserInfo;
@@ -23,14 +22,14 @@ exports.login = function(req, res) {
 
 //Registration Route
 exports.register = function(req, res, next) {
-    const firstName = req.body.firstName;
-    const lastName = req.body.lastName;
+    const firstName = req.body.profile.firstName;
+    const lastName = req.body.profile.lastName;
     const email = req.body.email;
     const password = req.body.password;
 
 
-    if(!email) return res.status(422).send({ error: 'You must enter an email address.'});
-    if(!firstName || !lastName) return res.status(422).send({ error: 'You must enter your full name.'});
+    if(!email || email === '') return res.status(422).send({ error: 'You must enter an email address.'});
+    if(!firstName || !lastName || lastName==='' || firstName==='') return res.status(422).send({ error: 'You must enter your full name.'});
     if(!password) return res.status(422).send({ error: 'You must enter a password.'});
 
     User.findOne({email: email}).exec(function(err, existingUser) {

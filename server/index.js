@@ -19,14 +19,21 @@ app.use(bodyParser.urlencoded({extended: false}));
 app.use(bodyParser.json());
 app.use(logger('dev'));
 
-//Enable CORS from client-side
-app.use(function(req, res, next){
-   res.header("Access-Control-Allow-Origin", "*");
-   res.header("Access-Control-Allow-Methods", 'PUT, GET, POST, DELETE, OPTIONS');
-   res.header("Access-Control-Allow-Headers", "Origin, X-requested-With, Content-Type, Accept, Authorization, Access-Control-Allow-Credentials");
-   res.header("Access-Control-Allow-Credentials", "true");
-   next();
+
+app.options("/*", function(req, res){
+    res.header('Access-Control-Allow-Origin', 'http://localhost:3000');
+    res.header('Access-Control-Allow-Methods', 'GET,PUT,POST,DELETE,OPTIONS');
+    res.header('Access-Control-Allow-Headers', 'Content-Type, Authorization, Content-Length, X-Requested-With');
+    res.status(200).send();
 });
+
+app.post("/*", function(req, res){
+    res.header('Access-Control-Allow-Origin', 'http://localhost:3000');
+    res.header('Access-Control-Allow-Methods', 'GET,PUT,POST,DELETE,OPTIONS');
+    res.header('Access-Control-Allow-Headers', 'Content-Type, Authorization, Content-Length, X-Requested-With');
+    res.status(200).send();
+});
+
 
 router(app);
 

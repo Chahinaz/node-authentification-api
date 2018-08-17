@@ -32,11 +32,11 @@ exports.updateUser = function(req, res){
         email: req.body.email,
         profile: {
             firstName: req.body.profile.firstName,
-            lastName: req.body.profile.lastName
+            lastName: req.body.profile.lastName,
+            bio: req.body.profile.bio,
+            role: req.body.profile.role,
         },
         image: req.body.image,
-        bio: req.body.bio,
-        role: req.body.role,
     });
 
     User.findByIdAndUpdate({_id: req.params._id,}, user, function(err) {
