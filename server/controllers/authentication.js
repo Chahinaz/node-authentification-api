@@ -3,29 +3,20 @@ const jwt = require('jsonwebtoken'),
     crypto = require('crypto-js'),
     User = require('../models/user'),
     config = require('../config/main');
-
-function setUserInfo(request) {
-    return {
-        _id: request._id,
-        firstName: request.profile.firstName,
-        lastName: request.profile.lastName,
-        img: request.profile.img,
-        bio: request.profile.bio
-    }
-}
+    setUserInfo = require('../helper').setUserInfo;
 
 //Generate JWT from user
 function generateToken(user) {
     return jwt.sign(user, config.secret, {
         expiresIn: 10080 //seconds
     });
-}
+};
 
 // Login Route
-exports.login = function(req, res, next) {
-    const userInfo = setUserInfo(res.user);
+exports.login = function(req, res) {
+    const userInfo = setUserInfo(req.body);
     res.status(200).json({
-        token: 'JWT ' + generateToken(userInfo),
+        token: `JWT ${generateToken(userInfo)}`,
         user: userInfo
     });
 };
@@ -46,7 +37,6 @@ exports.register = function(req, res, next) {
         if(err) return (err);
 
         if(existingUser) return res.status(422).send({ error: 'That email address is already in use.'});
-
 
         var user = new User ({
             email: email,
@@ -93,11 +83,4 @@ exports.forgotPassword = function (req, res, next) {
 //Reset Password
 exports.resetPassword = function(req, res, next) {
 
-};
-
-exports.allUsers = function(req, res) {
-    User.find({}, function(err, users){
-        if(err) return res.status(422).send({message: "An error occurred, please try again."});
-        res.send(users)
-    });
 };

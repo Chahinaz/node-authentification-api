@@ -1,22 +1,12 @@
 const AuthenticationController = require('./controllers/authentication');
-const express = require('express');
-const passport = require('passport');
-
-//Require Middleware to login/auth
-const requireAuth = passport.authenticate('jwt', {session: false});
-const requireLogin = passport.authenticate('local', {session: false});
+const UserController = require('./controllers/user');
 
 //Set up routes
 module.exports = function(app) {
-    const apiRoutes = express.Router();
-
     //Home route
     app.get('/', function(req, res){
         res.send("Welcome to Chahinaz' home ~ ")
     });
-
-    //url for API group
-    app.use('/api', apiRoutes);
 
     // Registration route
     app.post('/register', function(req, res){
@@ -29,7 +19,17 @@ module.exports = function(app) {
     });
 
     //All Users route
-    app.get('/users', AuthenticationController.allUsers);
+    app.get('/users', UserController.allUsers);
+
+    //Update user route
+    app.put('/users/:_id', function(req, res){
+        UserController.updateUser(req, res)
+    });
+
+    //Remove user route
+    app.post('/removeUser', function(req, res){
+        UserController.removeUser(req, res)
+    });
 
     //route for status(404)
     app.use(function(req, res) {

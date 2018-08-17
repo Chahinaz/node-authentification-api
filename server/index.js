@@ -1,21 +1,17 @@
 //Imports node modules and init Express
-const AuthenticationController = require('./controllers/authentication');
 const mongoose = require('mongoose'),
     express = require('express'),
-    passport = require('passport'),
     app = express(),
     bodyParser = require('body-parser'),
     logger = require('morgan'),
     config = require('./config/main.js'),
-    router = require('./router'),
-    cors = require('cors');
+    router = require('./router');
 
 //Database connection
 mongoose.connect(config.database, { useNewUrlParser: true });
 
 //Start the server
-var server;
-server = app.listen(config.port);
+app.listen(config.port);
 console.log('Your server is running on port: ' + config.port);
 
 //Setup middlewares
@@ -33,4 +29,5 @@ app.use(function(req, res, next){
 });
 
 router(app);
-module.exports = server;
+
+module.exports = app;
