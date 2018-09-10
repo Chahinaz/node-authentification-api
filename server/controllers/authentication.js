@@ -1,6 +1,5 @@
 //Setup user information from request
 const jwt = require('jsonwebtoken'),
-    crypto = require('crypto-js'),
     User = require('../models/user'),
     config = require('../config/main');
     setUserInfo = require('../helper').setUserInfo;
@@ -29,16 +28,16 @@ exports.register = function(req, res, next) {
     const password = req.body.password;
 
 
-    if(!email) return res.status(422).send({ error: 'You must enter an email address.'});
-    if(!firstName || !lastName) return res.status(422).send({ error: 'You must enter your full name.'});
-    if(!password) return res.status(422).send({ error: 'You must enter a password.'});
+    if(!email || email === '') return res.status(422).send({ error: 'You must enter an email address.'});
+    if(!firstName || !lastName || firstName === '' || lastName === '') return res.status(422).send({ error: 'You must enter your full name.'});
+    if(!password || password === '' || password.length < 6) return res.status(422).send({ error: 'You must enter a password. Enter at least 6 characters.'});
 
     User.findOne({email: email}).exec(function(err, existingUser) {
         if(err) return (err);
 
         if(existingUser) return res.status(422).send({ error: 'That email address is already in use.'});
 
-        var user = new User ({
+        const user = new User ({
             email: email,
             password: password,
             profile: { firstName, lastName}
@@ -47,7 +46,7 @@ exports.register = function(req, res, next) {
         user.save(function(err, user) {
             if(err) return next(err);
 
-            var userInfo = setUserInfo(user);
+            const userInfo = setUserInfo(user);
             res.status(201).json({
                 token: 'JWT '+ generateToken(userInfo),
                 user: userInfo
@@ -66,9 +65,7 @@ exports.roleAuthorization = function(role) {
                 res.status(422).json({error: 'No user found.'});
                 return next(err);
             }
-
             if (foundUser.role === role) return next();
-
             res.status(401).json({error: 'You are not authorized to view this content.'});
             return next('Unauthorized');
         });

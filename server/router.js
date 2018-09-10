@@ -5,7 +5,7 @@ const UserController = require('./controllers/user');
 module.exports = function(app) {
     //Home route
     app.get('/', function(req, res){
-        res.send("Welcome to Chahinaz' home ~ ")
+        res.send("Welcome to Chahinaz's API ~ ")
     });
 
     // Registration route
