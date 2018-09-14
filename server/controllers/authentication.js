@@ -14,6 +14,12 @@ function generateToken(user) {
 // Login Route
 exports.login = function(req, res) {
     const userInfo = setUserInfo(req.body);
+    console.log("our USER =============================================")
+    console.log(userInfo)
+
+    //TODO : get User by email, check Pwd, if success return userInfo
+    //TODO: get user's token,
+
     res.status(200).json({
         token: `JWT ${generateToken(userInfo)}`,
         user: userInfo
@@ -22,20 +28,22 @@ exports.login = function(req, res) {
 
 //Registration Route
 exports.register = function(req, res, next) {
+    console.log("register == ", req.body);
+
     const firstName = req.body.firstName;
     const lastName = req.body.lastName;
     const email = req.body.email;
     const password = req.body.password;
 
 
-    if(!email || email === '') return res.status(422).send({ error: 'You must enter an email address.'});
-    if(!firstName || !lastName || firstName === '' || lastName === '') return res.status(422).send({ error: 'You must enter your full name.'});
-    if(!password || password === '' || password.length < 6) return res.status(422).send({ error: 'You must enter a password. Enter at least 6 characters.'});
+    if(!email || email === '') return res.status(433).send({ error: 'You must enter an email address.'});
+    if(!firstName || !lastName || firstName === '' || lastName === '') return res.status(455).send({ error: 'You must enter your full name.'});
+    if(!password || password === '' || password.length < 6) return res.status(444).send({ error: 'You must enter a password. Enter at least 6 characters.'});
 
     User.findOne({email: email}).exec(function(err, existingUser) {
         if(err) return (err);
 
-        if(existingUser) return res.status(422).send({ error: 'That email address is already in use.'});
+        if(existingUser) return res.status(500).send({ error: 'That email address is already in use.'});
 
         const user = new User ({
             email: email,

@@ -18,8 +18,20 @@ module.exports = function(app) {
         AuthenticationController.login(req, res)
     });
 
+    // Login route
+    app.post('/logout', function(req, res){
+        AuthenticationController.login(req, res)
+    });
+
     //All Users route
     app.get('/users', UserController.allUsers);
+
+    //User's profile
+    app.get('/profile', function(req, res) {
+        console.log("req.data === ", req.data);
+        console.log("res.data === ", res.data);
+        UserController.profile(req, res)
+    });
 
     //Update user route
     app.put('/users/:_id', function(req, res){

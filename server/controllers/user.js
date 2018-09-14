@@ -1,20 +1,6 @@
 const User = require('../models/user');
 const setUserInfo = require('../helper').setUserInfo;
 
-// User route
-exports.viewOwnProfile = function (req, res, next) {
-    const userId = req.params._id;
-
-    User.findById(userId, (err, user) => {
-        if (err) {
-            res.status(400).json({ error: 'No user could be found for this ID.' });
-            return next(err);
-        }
-        const userToReturn = setUserInfo(user);
-        return res.status(200).json({ user: userToReturn });
-    });
-};
-
 //Drop user
 exports.removeUser = function(req, res){
     const email = req.body.email;
@@ -50,5 +36,19 @@ exports.allUsers = function(req, res) {
     User.find({}, function(err, users){
         if(err) return res.status(422).send({message: "An error occurred, please try again."});
         res.send(users)
+    });
+};
+// User route
+exports.profile = function (req, res, next) {
+    const userEmail = req.body.email;
+
+    User.find({email: userEmail}, (err, user) => {
+    console.log("user === ", user)
+        if (err) {
+            res.status(400).json({ error: 'No user could be found for this ID.' });
+            return next(err);
+        }
+        const userToReturn = setUserInfo(user);
+        return res.status(200).json({ user: userToReturn });
     });
 };
