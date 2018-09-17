@@ -6,21 +6,17 @@ const UserSchema = new mongoose.Schema({
         type: String,
         match: [/\S+@\S+\.\S+/, 'is invalid'],
         lowercase: true,
-        unique: true,
-        required: [true, "Can't be blank. Please fill the email input."]
+        unique: true
     },
     password: {
-        type: String,
-        required: [true, "Can't be blank. Please fill the password input."]
+        type: String
     },
     profile: {
         firstName: {
-            type: String,
-            required: [true, "Can't be blank. Please fill the first name input."]
+            type: String
         },
         lastName: {
-            type: String,
-            required: [true, "Can't be blank. Please fill the last name input."]
+            type: String
         },
         image: String,
         bio: String

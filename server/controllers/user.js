@@ -38,6 +38,7 @@ exports.allUsers = function(req, res) {
         res.send(users)
     });
 };
+
 // User route
 exports.profile = function (req, res, next) {
     const userEmail = req.body.email;
@@ -45,7 +46,7 @@ exports.profile = function (req, res, next) {
     User.find({email: userEmail}, (err, user) => {
     console.log("user === ", user)
         if (err) {
-            res.status(400).json({ error: 'No user could be found for this ID.' });
+            res.status(422).json({ error: 'No user could be found for this ID.' });
             return next(err);
         }
         const userToReturn = setUserInfo(user);

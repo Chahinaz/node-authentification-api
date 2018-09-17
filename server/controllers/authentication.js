@@ -7,43 +7,46 @@ const jwt = require('jsonwebtoken'),
 //Generate JWT from user
 function generateToken(user) {
     return jwt.sign(user, config.secret, {
-        expiresIn: 10080 //seconds
+        expiresIn: 604800 //seconds === 7 days
     });
 };
 
 // Login Route
 exports.login = function(req, res) {
-    const userInfo = setUserInfo(req.body);
-    console.log("our USER =============================================")
-    console.log(userInfo)
+    const userInfo = req.body;
 
-    //TODO : get User by email, check Pwd, if success return userInfo
-    //TODO: get user's token,
+    User.findOne({email: userInfo.email}, (err, user) => {
+        if (err) {
+            res.status(422).json({ error: 'No user could be found for this ID.' });
+            return next(err);
+        }
 
-    res.status(200).json({
-        token: `JWT ${generateToken(userInfo)}`,
-        user: userInfo
+        if(user.password != userInfo.password)
+            return res.status(422).json({error: 'Wrong password or email address.'})
+
+        res.status(200).json({
+            token: `JWT ${generateToken(userInfo)}`,
+            user: user
+        });
     });
 };
 
 //Registration Route
 exports.register = function(req, res, next) {
-    console.log("register == ", req.body);
-
     const firstName = req.body.firstName;
     const lastName = req.body.lastName;
     const email = req.body.email;
     const password = req.body.password;
 
 
-    if(!email || email === '') return res.status(433).send({ error: 'You must enter an email address.'});
-    if(!firstName || !lastName || firstName === '' || lastName === '') return res.status(455).send({ error: 'You must enter your full name.'});
-    if(!password || password === '' || password.length < 6) return res.status(444).send({ error: 'You must enter a password. Enter at least 6 characters.'});
+    if(!email || email === '') return res.status(422).send({ error: 'You must enter an email address.'});
+    if(!firstName || !lastName || firstName === '' || lastName === '') return res.status(422).send({ error: 'You must enter your full name.'});
+    if(!password || password === '' || password.length < 6) return res.status(422).send({ error: 'You must enter a password. Enter at least 6 characters.'});
 
     User.findOne({email: email}).exec(function(err, existingUser) {
         if(err) return (err);
 
-        if(existingUser) return res.status(500).send({ error: 'That email address is already in use.'});
+        if(existingUser) return res.status(422).send({ error: 'That email address is already in use.'});
 
         const user = new User ({
             email: email,
@@ -74,7 +77,7 @@ exports.roleAuthorization = function(role) {
                 return next(err);
             }
             if (foundUser.role === role) return next();
-            res.status(401).json({error: 'You are not authorized to view this content.'});
+            res.status(422).json({error: 'You are not authorized to view this content.'});
             return next('Unauthorized');
         });
     }
@@ -82,10 +85,12 @@ exports.roleAuthorization = function(role) {
 
 //Forgotten Password
 exports.forgotPassword = function (req, res, next) {
-
+    //Todo: MailGun module: https://app.mailgun.com/app/dashboard -> need domain
 };
 
 //Reset Password
 exports.resetPassword = function(req, res, next) {
+    //Todo: MailGun module: https://app.mailgun.com/app/dashboard -> need domain
+
 
 };
