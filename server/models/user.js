@@ -18,7 +18,10 @@ const UserSchema = new mongoose.Schema({
         lastName: {
             type: String
         },
-        image: String,
+        image: {
+            type: String,
+            default: "~/static/images/defaultProfilePicture.jpg"
+        },
         bio: String
     },
     role: {

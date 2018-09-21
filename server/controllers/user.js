@@ -14,20 +14,13 @@ exports.removeUser = function(req, res){
 
 //Update user's information
 exports.updateUser = function(req, res){
-    const user = ({
-        email: req.body.email,
-        profile: {
-            firstName: req.body.profile.firstName,
-            lastName: req.body.profile.lastName
-        },
-        image: req.body.image,
-        bio: req.body.bio,
-        role: req.body.role,
-    });
+    if(!req.body) return res.status(422).json({error: "You should fill the fields to dave."});
+    if(!req.body.firstName || !req.body.lastName || req.body.firstName === '' || req.body.lastName === '')
+        return res.status(422).send({ error: 'You must enter your full name.'});
 
-    User.findByIdAndUpdate({_id: req.params._id,}, user, function(err) {
+    User.findByIdAndUpdate({_id: req.body._id,}, user, function(err) {
         if(err) return res.status(422).json({error: err});
-        res.status(200).send({message: `User ${user.email} has been updated.`})
+        res.status(200).send({message: `User ${user.profile.firstName} ${user.profile.lastName} has been updated.`})
     })
 };
 

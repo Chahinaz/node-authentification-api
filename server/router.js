@@ -18,7 +18,7 @@ module.exports = function(app) {
         AuthenticationController.login(req, res)
     });
 
-    // Login route
+    // Logout route
     app.post('/logout', function(req, res){
         AuthenticationController.login(req, res)
     });
@@ -28,20 +28,16 @@ module.exports = function(app) {
 
     //User's profile
     app.get('/profile', function(req, res) {
-        console.log("req.data === ", req.data);
-        console.log("res.data === ", res.data);
         UserController.profile(req, res)
     });
 
     //Update user route
-    app.put('/users/:_id', function(req, res){
+    app.put('/profile', function(req, res){
         UserController.updateUser(req, res)
     });
 
     //Remove user route
-    app.post('/removeUser', function(req, res){
-        UserController.removeUser(req, res)
-    });
+//    app.delete('/', UserController.removeUser(req, res));
 
     //route for status(404)
     app.use(function(req, res) {
